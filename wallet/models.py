@@ -11,22 +11,34 @@ TRANSACTION_TYPES = [
 class AssetType(models.Model):
     name = models.CharField(max_length=16)
 
+    def __str__(self):
+        return self.name
+
 
 class Asset(models.Model):
     ticker = models.CharField(max_length=10)
     name = models.CharField(max_length=64)
     asset_type = models.ManyToManyField(AssetType)
 
+    def __str__(self):
+        return self.name
+
 
 class WalletType(models.Model):
     name = models.CharField(max_length=64)
+
+    def __str__(self):
+        return self.name
 
 
 class Wallet(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     wallet_type = models.ForeignKey(
         WalletType, on_delete=models.SET_NULL, null=True)
-    assets = models.ManyToManyField(Asset)
+    assets = models.ManyToManyField(Asset, blank=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 class Transaction(models.Model):
