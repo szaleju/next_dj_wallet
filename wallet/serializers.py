@@ -9,12 +9,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['username', 'email']
 
 
-class TransactionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Transaction
-        fields = '__all__'
-
-
 class AssetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asset
@@ -32,3 +26,13 @@ class WalletSerializer(serializers.ModelSerializer):
         assets = obj.assets.all()
         serializer = AssetSerializer(assets, many=True)
         return serializer.data
+
+
+class TransactionSerializer(serializers.ModelSerializer):
+
+    asset_name = serializers.ReadOnlyField(source='asset.name')
+
+    class Meta:
+        model = Transaction
+        fields = ['id', 'asset', 'quantity',
+                  'transaction_type', 'date', 'price', 'asset_name']

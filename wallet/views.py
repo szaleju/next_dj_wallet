@@ -25,6 +25,8 @@ def WalletDetailView(request):
 @permission_classes([IsAuthenticated])
 def ListTransactions(request):
     transactions = Transaction.objects.filter(user=request.user)
+    for transaction in transactions:
+        print(transaction.asset)
     serializer = TransactionSerializer(transactions, many=True)
     return Response(serializer.data)
 
@@ -37,7 +39,7 @@ def CreateTransaction(request):
     print("DATA", data)
     transaction = Transaction.objects.create(
         user=user,
-        asset_id=3,
+        asset_id=data['asset'],
         quantity=data['quantity'],
         transaction_type='transfer',
         price=10
